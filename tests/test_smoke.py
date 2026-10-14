@@ -2,16 +2,16 @@
 
 from typer.testing import CliRunner
 
-import web_edu_complex_network
-from web_edu_complex_network.cli import app
-from web_edu_complex_network.config import DATA_BRONZE_DIR, RAW_MTX_PATH
+import complex_networks_laboratories
+from complex_networks_laboratories.cli import app
+from complex_networks_laboratories.config import DATA_BRONZE_DIR, RAW_MTX_PATH
 
 runner = CliRunner()
 
 
 def test_package_import_and_version() -> None:
     """Verify package imports correctly and exposes a valid version string."""
-    assert web_edu_complex_network.__version__ == "0.1.0"
+    assert complex_networks_laboratories.__version__ == "0.1.0"
 
 
 def test_bronze_dataset_exists() -> None:
@@ -21,10 +21,10 @@ def test_bronze_dataset_exists() -> None:
 
 
 def test_cli_version_command() -> None:
-    """Verify CLI version command runs successfully."""
+    """Verify CLI version command runs successfully and reports the new name."""
     result = runner.invoke(app, ["version"])
     assert result.exit_code == 0
-    assert "0.1.0" in result.stdout
+    assert "complex-networks-laboratories version: 0.1.0" in result.stdout
 
 
 def test_cli_info_command() -> None:

@@ -1,17 +1,16 @@
-"""Command Line Interface (CLI) entrypoint for web-edu-complex-network."""
+"""Command Line Interface (CLI) entrypoint for complex-networks-laboratories."""
 
 from pathlib import Path
 from typing import Annotated
 
 import typer
 
-from web_edu_complex_network import __version__
-from web_edu_complex_network.config import DATA_SILVER_DIR, RAW_MTX_PATH
-from web_edu_complex_network.etl.silver import run_silver_pipeline
+from complex_networks_laboratories import __version__
+from complex_networks_laboratories.config import DATA_SILVER_DIR, RAW_MTX_PATH
 
 app = typer.Typer(
-    name="web-edu",
-    help="CLI tool for complex network analysis of the web-edu dataset.",
+    name="complex-networks",
+    help="CLI tool for complex network analysis.",
 )
 
 etl_app = typer.Typer(
@@ -24,13 +23,13 @@ app.add_typer(etl_app, name="etl")
 @app.command()
 def version() -> None:
     """Print the current application version."""
-    typer.echo(f"web-edu-complex-network version: {__version__}")
+    typer.echo(f"complex-networks-laboratories version: {__version__}")
 
 
 @app.command()
 def info() -> None:
     """Display basic dataset and environment configuration information."""
-    typer.echo("=== web-edu Complex Network ===")
+    typer.echo("=== Complex Networks Laboratories ===")
     typer.echo(f"Raw MatrixMarket data path: {RAW_MTX_PATH}")
     exists = "Found" if RAW_MTX_PATH.exists() else "Missing"
     typer.echo(f"Raw data status: {exists}")
@@ -78,6 +77,8 @@ def etl_silver(
     ] = DATA_SILVER_DIR,
 ) -> None:
     """Transform Bronze MatrixMarket into Silver tabular datasets (nodes.csv & edges.csv)."""
+    from complex_networks_laboratories.etl.silver import run_silver_pipeline
+
     try:
         nodes_path, edges_path = run_silver_pipeline(
             raw_mtx_path=RAW_MTX_PATH,

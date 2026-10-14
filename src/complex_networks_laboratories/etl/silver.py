@@ -8,7 +8,7 @@ from typing import Any
 import networkx as nx
 import scipy.io as sio
 
-from web_edu_complex_network.config import DATA_SILVER_DIR, RAW_MTX_PATH
+from complex_networks_laboratories.config import DATA_SILVER_DIR, RAW_MTX_PATH
 
 
 def generate_edge_weights(

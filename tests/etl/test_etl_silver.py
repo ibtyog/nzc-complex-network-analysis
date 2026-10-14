@@ -1,8 +1,8 @@
 import csv
 from pathlib import Path
 
-from web_edu_complex_network.config import RAW_MTX_PATH
-from web_edu_complex_network.etl.silver import (
+from complex_networks_laboratories.config import RAW_MTX_PATH
+from complex_networks_laboratories.etl.silver import (
     build_silver_tables,
     generate_edge_weights,
     run_silver_pipeline,
@@ -83,7 +83,7 @@ def test_run_silver_pipeline_end_to_end(tmp_path: Path) -> None:
 def test_cli_etl_silver_constant(tmp_path: Path) -> None:
     from typer.testing import CliRunner
 
-    from web_edu_complex_network.cli import app
+    from complex_networks_laboratories.cli import app
 
     runner = CliRunner()
     result = runner.invoke(
@@ -106,7 +106,7 @@ def test_cli_etl_silver_constant(tmp_path: Path) -> None:
 def test_cli_etl_silver_invalid_mode() -> None:
     from typer.testing import CliRunner
 
-    from web_edu_complex_network.cli import app
+    from complex_networks_laboratories.cli import app
 
     runner = CliRunner()
     result = runner.invoke(app, ["etl", "silver", "--weight-mode", "invalid_mode"])
