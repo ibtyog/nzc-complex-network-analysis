@@ -1,0 +1,6 @@
+# prop_name, value
+name,new_zealand_collab
+description,"A network of scientific collaborations among institutions in New Zealand. Nodes are institutions (universities, organizations, etc.), and two nodes i,j are connected if Scopus lists at least one publication with authors at institutions i and j, in the period 2010-2015. Edges are weighted by the number of such collaborations. Nodes are annotated with the categorical type of institution."
+citation,"['S. Aref, D. Friggens, and S. Hendy, \"Analysing scientific collaborations of New Zealand institutions using Scopus bibliometric data.\" Proc. Australasian Comp. Sci. Week Multiconf. (ACSW ’18), Article 49, 1-10 (2018), https://doi.org/10.1145/3167918.3167920']"
+url,https://doi.org/10.6084/m9.figshare.5705167
+tags,"['Social', 'Collaboration', 'Weighted', 'Metadata']"
