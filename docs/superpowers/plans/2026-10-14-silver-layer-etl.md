@@ -51,10 +51,14 @@ import pytest
 from web_edu_complex_network.etl.silver import generate_edge_weights, build_silver_tables
 from web_edu_complex_network.config import RAW_MTX_PATH
 
+
 def test_generate_edge_weights_constant():
-    weights = generate_edge_weights(edge_count=10, mode="constant", seed=None, min_val=1.0, max_val=1.0)
+    weights = generate_edge_weights(
+        edge_count=10, mode="constant", seed=None, min_val=1.0, max_val=1.0
+    )
     assert len(weights) == 10
     assert all(w == 1.0 for w in weights)
+
 
 def test_generate_edge_weights_random_seeded():
     w1 = generate_edge_weights(edge_count=100, mode="random", seed=42, min_val=1.0, max_val=5.0)
@@ -62,6 +66,7 @@ def test_generate_edge_weights_random_seeded():
     assert len(w1) == 100
     assert w1 == w2
     assert all(1.0 <= w <= 5.0 for w in w1)
+
 
 def test_build_silver_tables_shapes():
     nodes, edges = build_silver_tables(RAW_MTX_PATH, weight_mode="constant", seed=None)
@@ -132,17 +137,18 @@ git commit -m "feat(etl): implement core silver transformation logic and weight 
 ```python
 import csv
 
+
 def test_run_silver_pipeline_creates_files(tmp_path):
     nodes_csv = tmp_path / "nodes.csv"
     edges_csv = tmp_path / "edges.csv"
     from web_edu_complex_network.etl.silver import build_silver_tables, save_silver_tables
-    
+
     nodes, edges = build_silver_tables(RAW_MTX_PATH, weight_mode="constant", seed=None)
     save_silver_tables(nodes, edges, nodes_csv, edges_csv)
-    
+
     assert nodes_csv.exists()
     assert edges_csv.exists()
-    
+
     with open(nodes_csv, mode="r", newline="") as f:
         reader = csv.DictReader(f)
         rows = list(reader)
@@ -206,10 +212,12 @@ from web_edu_complex_network.cli import app
 
 runner = CliRunner()
 
+
 def test_cli_etl_silver_constant():
     result = runner.invoke(app, ["etl", "silver", "--weight-mode", "constant"])
     assert result.exit_code == 0
     assert "Silver tables successfully created" in result.stdout
+
 
 def test_cli_etl_silver_invalid_mode():
     result = runner.invoke(app, ["etl", "silver", "--weight-mode", "invalid_mode"])
