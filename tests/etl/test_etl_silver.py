@@ -78,3 +78,36 @@ def test_run_silver_pipeline_end_to_end(tmp_path: Path) -> None:
     )
     assert nodes_path.is_file()
     assert edges_path.is_file()
+
+
+def test_cli_etl_silver_constant(tmp_path: Path) -> None:
+    from typer.testing import CliRunner
+
+    from web_edu_complex_network.cli import app
+
+    runner = CliRunner()
+    result = runner.invoke(
+        app,
+        [
+            "etl",
+            "silver",
+            "--weight-mode",
+            "constant",
+            "--output-dir",
+            str(tmp_path),
+        ],
+    )
+    assert result.exit_code == 0
+    assert "Silver tables successfully created" in result.stdout
+    assert (tmp_path / "nodes.csv").is_file()
+    assert (tmp_path / "edges.csv").is_file()
+
+
+def test_cli_etl_silver_invalid_mode() -> None:
+    from typer.testing import CliRunner
+
+    from web_edu_complex_network.cli import app
+
+    runner = CliRunner()
+    result = runner.invoke(app, ["etl", "silver", "--weight-mode", "invalid_mode"])
+    assert result.exit_code != 0
