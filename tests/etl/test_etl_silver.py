@@ -1,5 +1,13 @@
+import csv
+from pathlib import Path
+
 from web_edu_complex_network.config import RAW_MTX_PATH
-from web_edu_complex_network.etl.silver import build_silver_tables, generate_edge_weights
+from web_edu_complex_network.etl.silver import (
+    build_silver_tables,
+    generate_edge_weights,
+    run_silver_pipeline,
+    save_silver_tables,
+)
 
 
 def test_generate_edge_weights_constant() -> None:
@@ -34,3 +42,39 @@ def test_build_silver_tables_shapes() -> None:
     assert "source" in first_edge and "target" in first_edge
     assert first_edge["weight"] == 1.0
     assert first_edge["capacity"] == 1.0
+
+
+def test_run_silver_pipeline_creates_files(tmp_path: Path) -> None:
+    nodes_csv = tmp_path / "nodes.csv"
+    edges_csv = tmp_path / "edges.csv"
+
+    nodes, edges = build_silver_tables(RAW_MTX_PATH, weight_mode="constant", seed=None)
+    save_silver_tables(nodes, edges, nodes_csv, edges_csv)
+
+    assert nodes_csv.exists()
+    assert edges_csv.exists()
+
+    with open(nodes_csv, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        assert len(rows) == 3031
+        assert rows[0]["name"] == "page_1"
+        assert rows[0]["is_even_degree"] in ["True", "False"]
+
+    with open(edges_csv, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        assert len(rows) == 6474
+        assert float(rows[0]["weight"]) == 1.0
+        assert float(rows[0]["capacity"]) == 1.0
+
+
+def test_run_silver_pipeline_end_to_end(tmp_path: Path) -> None:
+    nodes_path, edges_path = run_silver_pipeline(
+        raw_mtx_path=RAW_MTX_PATH,
+        output_dir=tmp_path,
+        weight_mode="random",
+        seed=123,
+    )
+    assert nodes_path.is_file()
+    assert edges_path.is_file()

@@ -1,11 +1,14 @@
 """Silver layer ETL module: transforms bronze MatrixMarket into tabular node and edge datasets."""
 
+import csv
 import random
 from pathlib import Path
 from typing import Any
 
 import networkx as nx
 import scipy.io as sio
+
+from web_edu_complex_network.config import DATA_SILVER_DIR, RAW_MTX_PATH
 
 
 def generate_edge_weights(
@@ -113,3 +116,81 @@ def build_silver_tables(
         )
 
     return nodes, edges
+
+
+def save_silver_tables(
+    nodes: list[dict[str, Any]],
+    edges: list[dict[str, Any]],
+    nodes_path: Path,
+    edges_path: Path,
+) -> tuple[Path, Path]:
+    """Persist nodes and edges records to CSV files.
+
+    Args:
+        nodes: List of node record dictionaries.
+        edges: List of edge record dictionaries.
+        nodes_path: Destination path for nodes.csv.
+        edges_path: Destination path for edges.csv.
+
+    Returns:
+        Tuple of (nodes_path, edges_path).
+    """
+    nodes_path.parent.mkdir(parents=True, exist_ok=True)
+    edges_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Write nodes.csv
+    with open(nodes_path, mode="w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["node_id", "name", "degree", "is_even_degree"])
+        writer.writeheader()
+        writer.writerows(nodes)
+
+    # Write edges.csv
+    with open(edges_path, mode="w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["source", "target", "weight", "capacity"])
+        writer.writeheader()
+        writer.writerows(edges)
+
+    return nodes_path, edges_path
+
+
+def run_silver_pipeline(
+    raw_mtx_path: Path = RAW_MTX_PATH,
+    output_dir: Path = DATA_SILVER_DIR,
+    weight_mode: str = "constant",
+    seed: int | None = None,
+    min_weight: float = 1.0,
+    max_weight: float = 5.0,
+    default_capacity: float = 1.0,
+) -> tuple[Path, Path]:
+    """Run the complete silver ETL pipeline from raw MatrixMarket to CSV tables.
+
+    Args:
+        raw_mtx_path: Path to the raw .mtx file.
+        output_dir: Destination directory for silver tables.
+        weight_mode: 'constant' or 'random'.
+        seed: Random seed for 'random' mode.
+        min_weight: Minimum weight value.
+        max_weight: Maximum weight value.
+        default_capacity: Default capacity attribute value on edges for max flow.
+
+    Returns:
+        Tuple of (nodes_csv_path, edges_csv_path).
+    """
+    nodes, edges = build_silver_tables(
+        mtx_path=raw_mtx_path,
+        weight_mode=weight_mode,
+        seed=seed,
+        min_weight=min_weight,
+        max_weight=max_weight,
+        default_capacity=default_capacity,
+    )
+
+    nodes_path = output_dir / "nodes.csv"
+    edges_path = output_dir / "edges.csv"
+
+    return save_silver_tables(
+        nodes=nodes,
+        edges=edges,
+        nodes_path=nodes_path,
+        edges_path=edges_path,
+    )
