@@ -88,6 +88,12 @@ uv run tox
 
 The project includes an interactive Command Line Interface:
 ```bash
+# General information
 uv run web-edu info
 uv run web-edu version
+
+# Execute Silver layer ETL (Bronze MatrixMarket -> Silver CSV tables)
+uv run web-edu etl silver --weight-mode constant
+uv run web-edu etl silver --weight-mode random --seed 42 --min-weight 1.0 --max-weight 5.0
 ```
+
