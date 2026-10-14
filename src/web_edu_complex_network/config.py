@@ -15,5 +15,6 @@ DATA_GOLD_DIR = DATA_DIR / "gold"
 
 # Key dataset file paths
 RAW_MTX_PATH = DATA_BRONZE_DIR / "web-edu.mtx"
+SILVER_NODES_CSV_PATH = DATA_SILVER_DIR / "nodes.csv"
 SILVER_EDGES_CSV_PATH = DATA_SILVER_DIR / "edges.csv"
 GOLD_GRAPHML_PATH = DATA_GOLD_DIR / "web_edu.graphml"
