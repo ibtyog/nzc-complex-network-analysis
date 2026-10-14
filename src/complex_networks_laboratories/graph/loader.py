@@ -30,7 +30,7 @@ def load_graph(
     if not edges_path.is_file():
         raise FileNotFoundError(f"Edges file not found: {edges_path}")
 
-    graph = nx.Graph()
+    graph: nx.Graph = nx.Graph()
 
     # Load node records (format: # index, _graphml_vertex_id, _pos)
     with open(nodes_path, newline="", encoding="utf-8") as f:

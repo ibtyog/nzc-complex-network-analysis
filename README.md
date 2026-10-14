@@ -71,6 +71,12 @@ Execute unit and integration tests with `pytest`:
 uv run pytest
 ```
 
+### Type Checking with Mypy
+Verify strict type annotations:
+```bash
+uv run mypy src tests
+```
+
 ### Linting & Formatting with Ruff
 Check code quality:
 ```bash
@@ -82,8 +88,14 @@ Format code:
 uv run ruff format .
 ```
 
+### Pyproject Formatting with pyproject-fmt
+Validate and format `pyproject.toml`:
+```bash
+uv run pyproject-fmt --check pyproject.toml
+```
+
 ### Multi-Environment Testing with Tox
-Run all checks in isolated virtual environments via `tox-uv`:
+Run all checks (`lint`, `format`, `mypy`, `pyproject-fmt`, `py313`) in isolated virtual environments via `tox-uv`:
 ```bash
 uv run tox
 ```
