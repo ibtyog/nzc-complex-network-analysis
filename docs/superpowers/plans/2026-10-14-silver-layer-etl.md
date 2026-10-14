@@ -1,4 +1,8 @@
-# Silver Layer ETL Implementation Plan
+# Silver Layer ETL Implementation Plan [DEPRECATED / SUPERSEDED]
+
+> [!WARNING]
+> **SUPERSEDED ARCHIVE:** This plan was superseded on 2026-10-14.
+> The initial `web-edu` dataset and Medallion ETL pipeline were replaced by the `new_zealand_collab` dataset with direct loading via `graph/loader.py` (see [2026-10-14-dataset-migration-nz-collab.md](2026-10-14-dataset-migration-nz-collab.md)).
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

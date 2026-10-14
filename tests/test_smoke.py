@@ -28,9 +28,12 @@ def test_cli_version_command() -> None:
 
 
 def test_cli_info_command() -> None:
-    """Verify CLI info command outputs dataset path information."""
+    """Verify CLI info command outputs dataset path information and graph metrics."""
     result = runner.invoke(app, ["info"])
     assert result.exit_code == 0
     assert "New Zealand Scientific Collaboration Network" in result.stdout
     assert "Nodes: 1,511" in result.stdout
     assert "Edges: 4,273" in result.stdout
+    assert "Connected Components: 24" in result.stdout
+    assert "Giant Component: 1,463 nodes" in result.stdout
+    assert "University of Auckland" in result.stdout

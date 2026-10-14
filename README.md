@@ -1,42 +1,48 @@
-# web-edu-complex-network
+# complex-networks-laboratories
 
-Complex network analysis of the `web-edu` academic hyperlink dataset for the *Complex Networks* (Sieci Złożone) laboratory course.
+Complex network analysis and graph algorithms for the *Complex Networks* (*Sieci Złożone*, Semester 5) course.
 
 ---
 
 ## Project Overview
 
-This repository hosts a modular Python project analyzing the topological properties and graph algorithms on the `web-edu` network.
+This repository hosts a modular Python project implementing graph algorithms and structural analysis on the **New Zealand Scientific Collaborations (2010–2015)** network (`new_zealand_collab`).
 
-* **Vertices (3,031):** Educational web pages and academic documents.
-* **Edges (6,474):** Hyperlinks connecting pages.
-* **System:** Information topology and hyperlink navigation across educational domains.
+* **Vertices (1,511):** Academic institutions, universities, Crown Research Institutes, hospitals, and industrial research laboratories across New Zealand.
+* **Edges (4,273):** Joint scientific co-authorship relationships between researchers affiliated with pairs of institutions.
+* **Edge Weights:** Integer count of joint publications indexed in Scopus (2010–2015), representing knowledge co-production and collaborative capacity.
+* **System:** National scientific knowledge production, inter-institutional collaboration topology, and research collaboration dynamics.
 
-For a comprehensive domain description and citations, see [docs/dataset_description.md](docs/dataset_description.md).
+For a comprehensive domain description, mathematical constraints, and formal citations, see [docs/dataset_description.md](docs/dataset_description.md).
 
 ---
 
 ## Architecture & Layout
 
 ```text
-web-edu-complex-network/
+complex-networks-laboratories/
 ├── pyproject.toml              # UV / packaging metadata, tool configs
 ├── tox.ini                     # Isolated test & lint environment runner
 ├── README.md                   # Project overview & developer guide
 ├── docs/
 │   └── dataset_description.md  # Detailed academic description of the network
 ├── data/
-│   ├── bronze/                 # Raw MatrixMarket source files (web-edu.mtx)
-│   ├── silver/                 # Intermediate filtered edge tables
-│   └── gold/                   # Enriched, analysis-ready graphs (GraphML)
+│   └── new_zealand_collab/     # Network CSV dataset from Netzschleuder
+│       ├── nodes.csv           # Vertex catalog with institution names
+│       ├── edges.csv           # Undirected co-authorship edges with Scopus weights
+│       └── gprops.csv          # Dataset provenance and metadata
 ├── notebooks/                  # Interactive Jupyter notebooks for laboratory tasks
 ├── tests/                      # Pytest test suite
+│   ├── test_smoke.py           # Smoke and CLI integration tests
+│   └── graph/
+│       └── test_loader.py      # Graph loader topology and invariant tests
 └── src/
-    └── web_edu_complex_network/
+    └── complex_networks_laboratories/
         ├── __init__.py
         ├── config.py           # Central filesystem paths & settings
-        ├── etl/                # Bronze -> Silver -> Gold transformation pipelines
-        ├── graph/              # Graph loading, models, and property computations
+        ├── graph/              # In-memory graph loading and property models
+        │   ├── __init__.py
+        │   └── loader.py       # Zero-copy, direct NetworkX graph loader
         ├── algorithms/         # Shortest path, Eulerian analysis, and Max Flow
         └── cli.py              # Interactive CLI application
 ```
@@ -46,7 +52,7 @@ web-edu-complex-network/
 ## Quickstart
 
 ### Prerequisites
-* Python `>= 3.11` (or Python `3.13`)
+* Python `>= 3.11` (tested with Python `3.13`)
 * [`uv`](https://github.com/astral-sh/uv) fast Python package manager
 
 ### Environment Setup
@@ -60,7 +66,7 @@ uv sync
 ## Development Tools
 
 ### Running Tests
-Execute smoke and unit tests with `pytest`:
+Execute unit and integration tests with `pytest`:
 ```bash
 uv run pytest
 ```
@@ -86,14 +92,12 @@ uv run tox
 
 ## CLI Usage
 
-The project includes an interactive Command Line Interface:
+The project includes an interactive Command Line Interface (`complex-networks`):
+
 ```bash
-# General information
-uv run web-edu info
-uv run web-edu version
+# Display version
+uv run complex-networks version
 
-# Execute Silver layer ETL (Bronze MatrixMarket -> Silver CSV tables)
-uv run web-edu etl silver --weight-mode constant
-uv run web-edu etl silver --weight-mode random --seed 42 --min-weight 1.0 --max-weight 5.0
+# Inspect network metrics and hub institutions
+uv run complex-networks info
 ```
-
