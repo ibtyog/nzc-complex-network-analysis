@@ -40,7 +40,7 @@ complex-networks-laboratories/
         ├── graph/              # In-memory graph loading and property models
         │   ├── __init__.py
         │   └── loader.py       # Zero-copy, direct NetworkX graph loader
-        ├── algorithms/         # Shortest path, Eulerian analysis, and Max Flow
+        ├── algorithms/         # TBA if needed
         └── cli.py              # Interactive CLI application
 ```
 
