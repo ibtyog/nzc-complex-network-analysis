@@ -8,11 +8,13 @@ Complex network analysis and graph algorithms for the _Complex Networks_ (_Sieci
 
 This repository hosts a modular Python project implementing graph algorithms and structural analysis on the **New Zealand Scientific Collaborations (2010–2015)** network (`new_zealand_collab`).
 
-For a comprehensive domain description, mathematical constraints, and formal citations, see [docs/dataset_description.md](docs/dataset_description.md).
+For a comprehensive domain description, see [docs/dataset_description.md](docs/dataset_description.md).
 
----
+## Docs
 
-## Architecture & Layout§
+See [docs](docs/) for more information (e.g. agent plans).
+
+## Architecture & Layout
 
 ```text
 complex-networks-laboratories/
